@@ -28,13 +28,13 @@ Type stringToType(string &strType) {
 
 void printArray(Array &arr) {
     if (arr.type == INT) {
-    int* intItems = static_cast<int*>(arr.items);
-    for (int i = 0; i < arr.size; ++i) {
-        if (i == 0) cout << "[";
-        cout << intItems[i];
-        if (i+1 != arr.size) cout << ", ";
-        if (i+1 == arr.size) cout << "]";
-    }
+        int* intItems = static_cast<int*>(arr.items);
+        for (int i = 0; i < arr.size; ++i) {
+            if (i == 0) cout << "[";
+            cout << intItems[i];
+            if (i+1 != arr.size) cout << ", ";
+            if (i+1 == arr.size) cout << "]";
+        }
     } else if (arr.type == DOUBLE) {
         double* doubleItems = static_cast<double*>(arr.items);
         for (int i = 0; i < arr.size; ++i) {
