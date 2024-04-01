@@ -26,6 +26,36 @@ Type stringToType(string &strType) {
     }
 }
 
+void printArray(Array &arr) {
+    if (arr.type == INT) {
+    int* intItems = static_cast<int*>(arr.items);
+    for (int i = 0; i < arr.size; ++i) {
+        if (i == 0) cout << "[";
+        cout << intItems[i];
+        if (i+1 != arr.size) cout << ", ";
+        if (i+1 == arr.size) cout << "]";
+    }
+    } else if (arr.type == DOUBLE) {
+        double* doubleItems = static_cast<double*>(arr.items);
+        for (int i = 0; i < arr.size; ++i) {
+            if (i == 0) cout << "[";
+            cout << doubleItems[i];
+            if (i+1 != arr.size) cout << ", ";
+            if (i+1 == arr.size) cout << "]";
+        }
+    } else if (arr.type == STRING) {
+        string* stringItems = static_cast<string*>(arr.items);
+        for (int i = 0; i < arr.size; ++i) {
+            if (i == 0) cout << "[";
+            cout << "\"" << stringItems[i] << "\"";
+            if (i+1 != arr.size) cout << ", ";
+            if (i+1 == arr.size) cout << "]";
+        }
+    } else {
+        // arr.type == ARRAY
+    }
+}
+
 void cmdList(Database &db) {
     for (int i = 0; i < db.size; ++i) {
         cout << db.entries[i] -> key << ": ";
@@ -41,34 +71,7 @@ void cmdList(Database &db) {
             break;
         case ARRAY:
             Array pa = *(static_cast<Array*>(db.entries[i] -> value));
-            if (pa.type == INT) {
-                int* intItems = static_cast<int*>(pa.items);
-                for (int i = 0; i < pa.size; ++i) {
-                    if (i == 0) cout << "[";
-                    cout << intItems[i];
-                    if (i+1 != pa.size) cout << ", ";
-                    if (i+1 == pa.size) cout << "]";
-                }
-            } else if (pa.type == DOUBLE) {
-                double* doubleItems = static_cast<double*>(pa.items);
-                for (int i = 0; i < pa.size; ++i) {
-                    if (i == 0) cout << "[";
-                    cout << doubleItems[i];
-                    if (i+1 != pa.size) cout << ", ";
-                    if (i+1 == pa.size) cout << "]";
-                }
-            } else if (pa.type == STRING) {
-                string* stringItems = static_cast<string*>(pa.items);
-                for (int i = 0; i < pa.size; ++i) {
-                    if (i == 0) cout << "[";
-                    cout << "\"" << stringItems[i] << "\"";
-                    if (i+1 != pa.size) cout << ", ";
-                    if (i+1 == pa.size) cout << "]";
-                }
-            } else {
-                // pa.type == ARRAY
-            }
-            
+            printArray(pa);
         }
         cout << endl;
     }
@@ -168,33 +171,7 @@ void cmdGet(Database &db) {
             case ARRAY:
                 cout << getEntry -> key << ": ";
                 Array pa = *(static_cast<Array*>(getEntry -> value));
-                if (pa.type == INT) {
-                    int* intItems = static_cast<int*>(pa.items);
-                    for (int i = 0; i < pa.size; ++i) {
-                        if (i == 0) cout << "[";
-                        cout << intItems[i];
-                        if (i+1 != pa.size) cout << ", ";
-                        if (i+1 == pa.size) cout << "]";
-                    }
-                } else if (pa.type == DOUBLE) {
-                    double* doubleItems = static_cast<double*>(pa.items);
-                    for (int i = 0; i < pa.size; ++i) {
-                        if (i == 0) cout << "[";
-                        cout << doubleItems[i];
-                        if (i+1 != pa.size) cout << ", ";
-                        if (i+1 == pa.size) cout << "]";
-                    }
-                } else if (pa.type == STRING) {
-                    string* stringItems = static_cast<string*>(pa.items);
-                    for (int i = 0; i < pa.size; ++i) {
-                        if (i == 0) cout << "[";
-                        cout << "\"" << stringItems[i] << "\"";
-                        if (i+1 != pa.size) cout << ", ";
-                        if (i+1 == pa.size) cout << "]";
-                    }
-                } else {
-                    // pa.type == ARRAY
-                }
+                printArray(pa);
                 break;
         }
     }
