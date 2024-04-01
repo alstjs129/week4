@@ -42,12 +42,14 @@ void cmdList(Database &db) {
             break;
         case ARRAY:
             Array pa = *(static_cast<Array*>(db.entries[i] -> value));
-            cout << "size " << pa.size << " type " << pa.type << " itmes " << pa.items << endl;
             switch (pa.type) {
                 case INT:
                     int* intItems = static_cast<int*>(pa.items);
                     for (int i = 0; i < pa.size; ++i) {
-                        cout << intItems[i] << ", ";
+                        if (i == 0) cout << "[";
+                        cout << intItems[i];
+                        if (i+1 != pa.size) cout << ", ";
+                        if (i+1 == pa.size) cout << "]";
                     }
                     break;
             }
@@ -100,7 +102,6 @@ void cmdAdd(Database &db) {
                 cout << "item[" << i << "]: ";
                 cin >> intArray[i];
             }
-            cout << intArray[0] << ", " << intArray[1] << ", " << intArray[2] << endl;
             array.items = intArray;
 
             add(db, create(type, key, new Array(array)));
