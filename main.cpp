@@ -12,7 +12,6 @@ Type type;
 Array array;
 
 Type stringToType(string &strType) {
-    Type arrayType;
     if (strType == "int") {
         return INT;
     }
@@ -66,6 +65,8 @@ void cmdList(Database &db) {
                     if (i+1 != pa.size) cout << ", ";
                     if (i+1 == pa.size) cout << "]";
                 }
+            } else {
+                // pa.type == ARRAY
             }
             
         }
@@ -140,6 +141,9 @@ void cmdAdd(Database &db) {
 
             add(db, create(type, key, new Array(array)));
         }
+        else {
+            // arrayTypeStr == "array"
+        }
     }
 }
 
@@ -160,6 +164,35 @@ void cmdGet(Database &db) {
                 cout << getEntry -> key << ": \"" << *(static_cast<string*>(getEntry->value)) << "\"";
                 break;
             case ARRAY:
+                cout << getEntry -> key << ": ";
+                Array pa = *(static_cast<Array*>(getEntry -> value));
+                if (pa.type == INT) {
+                    int* intItems = static_cast<int*>(pa.items);
+                    for (int i = 0; i < pa.size; ++i) {
+                        if (i == 0) cout << "[";
+                        cout << intItems[i];
+                        if (i+1 != pa.size) cout << ", ";
+                        if (i+1 == pa.size) cout << "]";
+                    }
+                } else if (pa.type == DOUBLE) {
+                    double* doubleItems = static_cast<double*>(pa.items);
+                    for (int i = 0; i < pa.size; ++i) {
+                        if (i == 0) cout << "[";
+                        cout << doubleItems[i];
+                        if (i+1 != pa.size) cout << ", ";
+                        if (i+1 == pa.size) cout << "]";
+                    }
+                } else if (pa.type == STRING) {
+                    string* stringItems = static_cast<string*>(pa.items);
+                    for (int i = 0; i < pa.size; ++i) {
+                        if (i == 0) cout << "[";
+                        cout << "\"" << stringItems[i] << "\"";
+                        if (i+1 != pa.size) cout << ", ";
+                        if (i+1 == pa.size) cout << "]";
+                    }
+                } else {
+                    // pa.type == ARRAY
+                }
                 break;
         }
     }
