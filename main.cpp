@@ -9,6 +9,23 @@ int intValue;
 double doubleValue;
 string stringValue;
 Type type;
+Array array;
+
+Type stringToType(string &strType) {
+    Type arrayType;
+    if (strType == "int") {
+        return INT;
+    }
+    else if(strType == "double") {
+        return DOUBLE;
+    }
+    else if(strType == "string") {
+        return STRING;
+    }
+    else {
+        return ARRAY;
+    }
+}
 
 void cmdList(Database &db) {
     for (int i = 0; i < db.size; ++i) {
@@ -24,6 +41,16 @@ void cmdList(Database &db) {
             cout << "\"" << *(static_cast<string*>(db.entries[i] -> value)) << "\"";
             break;
         case ARRAY:
+            Array pa = *(static_cast<Array*>(db.entries[i] -> value));
+            cout << "size " << pa.size << " type " << pa.type << " itmes " << pa.items;
+            switch (pa.type) {
+                case INT:
+                    int* intItems = static_cast<int*>(pa.items);
+                    for (int i = 0; i < pa.size; ++i) {
+                        cout << intItems[i] << ", ";
+                    }
+                    break;
+            }
             break;
         }
         cout << endl;
@@ -52,21 +79,27 @@ void cmdAddInput() {
     }
     else {
         type=ARRAY;
-        string arrayType;
+
+        string arrayTypeStr;
         int arraySize;
 
-        cout << "value: type (int, double, string, array): ";
-        cin >> arrayType;
+        cout << "type (int, double, string, array): ";
+        cin >> arrayTypeStr;
+        array.type = stringToType(arrayTypeStr);
 
         cout << "size: ";
         cin >> arraySize;
+        array.size = arraySize;
 
-        if (arrayType == "int") {
+        if (arrayTypeStr == "int") {
             int intArray[arraySize];
             for (int i = 0; i < arraySize; ++i) {
                 cout << "item[" << i << "]: ";
                 cin >> intArray[i];
             }
+            cout << intArray[0] << ", " << intArray[1] << ", " << intArray[2] << endl;
+            array.items = intArray;
+
         }
     }
 }
@@ -85,7 +118,7 @@ void cmdAdd(Database &db) {
             add(db, create(type, key, new string(stringValue)));
             break;
         case ARRAY:
-
+            add(db, create(type, key, new Array(array)));
             break;
     }
 }
