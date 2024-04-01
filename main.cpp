@@ -42,18 +42,24 @@ void cmdList(Database &db) {
             break;
         case ARRAY:
             Array pa = *(static_cast<Array*>(db.entries[i] -> value));
-            switch (pa.type) {
-                case INT:
-                    int* intItems = static_cast<int*>(pa.items);
-                    for (int i = 0; i < pa.size; ++i) {
-                        if (i == 0) cout << "[";
-                        cout << intItems[i];
-                        if (i+1 != pa.size) cout << ", ";
-                        if (i+1 == pa.size) cout << "]";
-                    }
-                    break;
+            if (pa.type == INT) {
+                int* intItems = static_cast<int*>(pa.items);
+                for (int i = 0; i < pa.size; ++i) {
+                    if (i == 0) cout << "[";
+                    cout << intItems[i];
+                    if (i+1 != pa.size) cout << ", ";
+                    if (i+1 == pa.size) cout << "]";
+                }
+            } else if (pa.type == DOUBLE) {
+                double* doubleItems = static_cast<double*>(pa.items);
+                for (int i = 0; i < pa.size; ++i) {
+                    if (i == 0) cout << "[";
+                    cout << doubleItems[i];
+                    if (i+1 != pa.size) cout << ", ";
+                    if (i+1 == pa.size) cout << "]";
+                }
             }
-            break;
+            
         }
         cout << endl;
     }
@@ -106,6 +112,16 @@ void cmdAdd(Database &db) {
 
             add(db, create(type, key, new Array(array)));
         }
+        else if (arrayTypeStr == "double") {
+            double* doubleArray = new double[arraySize];
+            for (int i = 0; i < arraySize; ++i) {
+                cout << "item[" << i << "]: ";
+                cin >> doubleArray[i];
+            }
+            array.items = doubleArray;
+
+            add(db, create(type, key, new Array(array)));
+        }
     }
 }
 
@@ -116,17 +132,17 @@ void cmdGet(Database &db) {
     Entry *getEntry = get(db, key);
     if (getEntry != nullptr) {
         switch (getEntry -> type) {
-        case INT:
-            cout << getEntry -> key << ": " << *(static_cast<int*>(getEntry->value));
-            break;
-        case DOUBLE:
-            cout << getEntry -> key << ": " << *(static_cast<double*>(getEntry->value));
-            break;
-        case STRING:
-            cout << getEntry -> key << ": \"" << *(static_cast<string*>(getEntry->value)) << "\"";
-            break;
-        case ARRAY:
-            break;
+            case INT:
+                cout << getEntry -> key << ": " << *(static_cast<int*>(getEntry->value));
+                break;
+            case DOUBLE:
+                cout << getEntry -> key << ": " << *(static_cast<double*>(getEntry->value));
+                break;
+            case STRING:
+                cout << getEntry -> key << ": \"" << *(static_cast<string*>(getEntry->value)) << "\"";
+                break;
+            case ARRAY:
+                break;
         }
     }
     cout << endl;
