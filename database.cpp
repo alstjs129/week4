@@ -67,3 +67,12 @@ void destroy(Database &database) {
     
     delete[] database.entries;
 }
+
+int keyCheck(Database &database, string &key) {
+    for (int i = 0; i < database.size; ++i) {
+        if (database.entries[i]->key == key) {
+            return 1;
+        }
+    }
+    return 0;
+}

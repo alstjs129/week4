@@ -43,4 +43,6 @@ void remove(Database &database, std::string &key);
 // 데이터베이스를 해제한다.
 void destroy(Database &database);
 
+int keyCheck(Database &database, string &key);
+
 #endif

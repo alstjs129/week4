@@ -77,6 +77,8 @@ void cmdList(Database &db) {
 void cmdAdd(Database &db) {
     cout << "key: ";
     cin >> key;
+    int keyInDb = keyCheck(db, key);
+    if (keyInDb) remove(db, key);
 
     cout << "type (int, double, string, array): ";
     cin >> inputType;
