@@ -42,7 +42,7 @@ void cmdList(Database &db) {
             break;
         case ARRAY:
             Array pa = *(static_cast<Array*>(db.entries[i] -> value));
-            cout << "size " << pa.size << " type " << pa.type << " itmes " << pa.items;
+            cout << "size " << pa.size << " type " << pa.type << " itmes " << pa.items << endl;
             switch (pa.type) {
                 case INT:
                     int* intItems = static_cast<int*>(pa.items);
