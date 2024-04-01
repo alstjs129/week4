@@ -57,7 +57,7 @@ void cmdList(Database &db) {
     }
 }
 
-void cmdAddInput() {
+void cmdAdd(Database &db) {
     cout << "key: ";
     cin >> key;
 
@@ -68,14 +68,17 @@ void cmdAddInput() {
     if (inputType == "int") {
         type=INT;
         cin >> intValue;
+        add(db, create(type, key, new int(intValue)));
     }
     else if(inputType == "double") {
         type=DOUBLE;
         cin >> doubleValue;
+        add(db, create(type, key, new double(doubleValue)));
     }
     else if(inputType == "string") {
         type=STRING;
         getline(cin >> ws, stringValue);
+        add(db, create(type, key, new string(stringValue)));
     }
     else {
         type=ARRAY;
@@ -92,7 +95,7 @@ void cmdAddInput() {
         array.size = arraySize;
 
         if (arrayTypeStr == "int") {
-            int intArray[arraySize];
+            int* intArray = new int[arraySize];
             for (int i = 0; i < arraySize; ++i) {
                 cout << "item[" << i << "]: ";
                 cin >> intArray[i];
@@ -100,26 +103,8 @@ void cmdAddInput() {
             cout << intArray[0] << ", " << intArray[1] << ", " << intArray[2] << endl;
             array.items = intArray;
 
-        }
-    }
-}
-
-void cmdAdd(Database &db) {
-    cmdAddInput();
-
-    switch (type) {
-        case INT:
-            add(db, create(type, key, new int(intValue)));
-            break;
-        case DOUBLE:
-            add(db, create(type, key, new double(doubleValue)));
-            break;
-        case STRING:
-            add(db, create(type, key, new string(stringValue)));
-            break;
-        case ARRAY:
             add(db, create(type, key, new Array(array)));
-            break;
+        }
     }
 }
 
