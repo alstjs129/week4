@@ -58,6 +58,14 @@ void cmdList(Database &db) {
                     if (i+1 != pa.size) cout << ", ";
                     if (i+1 == pa.size) cout << "]";
                 }
+            } else if (pa.type == STRING) {
+                string* stringItems = static_cast<string*>(pa.items);
+                for (int i = 0; i < pa.size; ++i) {
+                    if (i == 0) cout << "[";
+                    cout << "\"" << stringItems[i] << "\"";
+                    if (i+1 != pa.size) cout << ", ";
+                    if (i+1 == pa.size) cout << "]";
+                }
             }
             
         }
@@ -119,6 +127,16 @@ void cmdAdd(Database &db) {
                 cin >> doubleArray[i];
             }
             array.items = doubleArray;
+
+            add(db, create(type, key, new Array(array)));
+        } 
+        else if (arrayTypeStr == "string") {
+            string* stringArray = new string[arraySize];
+            for (int i = 0; i < arraySize; ++i) {
+                cout << "item[" << i << "]: ";
+                getline(cin >> ws, stringArray[i]);
+            }
+            array.items = stringArray;
 
             add(db, create(type, key, new Array(array)));
         }
