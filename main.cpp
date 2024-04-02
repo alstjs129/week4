@@ -186,10 +186,27 @@ void cmdAdd(Database &db) {
                     }
                     nestedArray->items = nestedInt;
                     arrayList[i] = nestedArray;
+                } 
+                else if(nestedArrayType == "double") {
+                    double* nestedDouble = new double[nestedArraySize];
+                    for (int j = 0; j < nestedArraySize; ++j) {
+                        cout << "item[" << j << "]: ";
+                        cin >> nestedDouble[i];
+                    }
+                    nestedArray->items = nestedDouble;
+                    arrayList[i] = nestedArray;
                 }
-
-                
+                else if(nestedArrayType == "string") {
+                    string* nestedString = new string[nestedArraySize];
+                    for (int j = 0; j < nestedArraySize; ++j) {
+                        cout << "item[" << j << "]: ";
+                        getline(cin >> ws, nestedString[i]);
+                    }
+                    nestedArray->items = nestedString;
+                    arrayList[i] = nestedArray;
+                }
             }
+            add(db, create(type, key, arrayList));
         }
     }
 }
