@@ -113,11 +113,13 @@ void cmdAdd(Database &db) {
         cin >> arrayTypeStr;
         array.type = stringToType(arrayTypeStr);
 
-        cout << "size: ";
-        cin >> arraySize;
-        array.size = arraySize;
+
 
         if (arrayTypeStr == "int") {
+            cout << "size: ";
+            cin >> arraySize;
+            array.size = arraySize;
+
             int* intArray = new int[arraySize];
             for (int i = 0; i < arraySize; ++i) {
                 cout << "item[" << i << "]: ";
@@ -128,6 +130,10 @@ void cmdAdd(Database &db) {
             add(db, create(type, key, new Array(array)));
         }
         else if (arrayTypeStr == "double") {
+            cout << "size: ";
+            cin >> arraySize;
+            array.size = arraySize;
+                        
             double* doubleArray = new double[arraySize];
             for (int i = 0; i < arraySize; ++i) {
                 cout << "item[" << i << "]: ";
@@ -138,6 +144,10 @@ void cmdAdd(Database &db) {
             add(db, create(type, key, new Array(array)));
         } 
         else if (arrayTypeStr == "string") {
+            cout << "size: ";
+            cin >> arraySize;
+            array.size = arraySize;
+                        
             string* stringArray = new string[arraySize];
             for (int i = 0; i < arraySize; ++i) {
                 cout << "item[" << i << "]: ";
@@ -149,6 +159,37 @@ void cmdAdd(Database &db) {
         }
         else {
             // arrayTypeStr == "array"
+            int nestedArrayTotalSize, nestedArraySize;
+            string nestedArrayType;
+
+            cout << "size: ";
+            cin >> nestedArrayTotalSize;
+
+            Array **arrayList = new Array*[nestedArrayTotalSize];
+
+            for (int i = 0; i < nestedArrayTotalSize; ++i) {
+                Array* nestedArray = new Array;
+
+                cout << "item[" << i << "]: type (int, double, string, array): ";
+                cin >> nestedArrayType;
+                nestedArray->type = stringToType(nestedArrayType);
+
+                cout << "size: ";
+                cin >> nestedArraySize;
+                nestedArray->size = nestedArraySize;
+
+                if (nestedArrayType == "int") {
+                    int* nestedInt = new int[nestedArraySize];
+                    for (int j = 0; j < nestedArraySize; ++j) {
+                        cout << "item[" << j << "]: ";
+                        cin >> nestedInt[i];
+                    }
+                    nestedArray->items = nestedInt;
+                    arrayList[i] = nestedArray;
+                }
+
+                
+            }
         }
     }
 }
