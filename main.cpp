@@ -8,6 +8,7 @@ string cmd, key, inputType;
 int intValue;
 double doubleValue;
 string stringValue;
+
 Type type;
 Array array;
 
