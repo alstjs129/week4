@@ -31,63 +31,74 @@ void printArray(Array &arr) {
     if (arr.type == INT) {
         int* intItems = static_cast<int*>(arr.items);
         for (int i = 0; i < arr.size; ++i) {
-            if (i == 0) cout << "[";
-            cout << intItems[i];
-            if (i+1 != arr.size) cout << ", ";
-            if (i+1 == arr.size) cout << "]";
+            if (i == 0) std::cout << "[";
+            std::cout << intItems[i];
+            if (i+1 != arr.size) std::cout << ", ";
+            if (i+1 == arr.size) std::cout << "]";
         }
     } else if (arr.type == DOUBLE) {
         double* doubleItems = static_cast<double*>(arr.items);
         for (int i = 0; i < arr.size; ++i) {
-            if (i == 0) cout << "[";
-            cout << doubleItems[i];
-            if (i+1 != arr.size) cout << ", ";
-            if (i+1 == arr.size) cout << "]";
+            if (i == 0) std::cout << "[";
+            std::cout << doubleItems[i];
+            if (i+1 != arr.size) std::cout << ", ";
+            if (i+1 == arr.size) std::cout << "]";
         }
     } else if (arr.type == STRING) {
         string* stringItems = static_cast<string*>(arr.items);
         for (int i = 0; i < arr.size; ++i) {
-            if (i == 0) cout << "[";
-            cout << "\"" << stringItems[i] << "\"";
-            if (i+1 != arr.size) cout << ", ";
-            if (i+1 == arr.size) cout << "]";
+            if (i == 0) std::cout << "[";
+            std::cout << "\"" << stringItems[i] << "\"";
+            if (i+1 != arr.size) std::cout << ", ";
+            if (i+1 == arr.size) std::cout << "]";
         }
     } else {
         // arr.type == ARRAY
+        Array** arrayList = static_cast<Array**>(arr.items);
+        
+        for (int i = 0; i < arr.size; ++i) {
+            Array *arrayItems = arrayList[i]; 
+            for (int j = 0; j < arrayItems->size; ++j) {
+                if (arrayItems->type == INT) {
+                    int *intArrayItems = static_cast<int*>(arrayItems->items); 
+                    std::cout << intArrayItems[j] << ", ";
+                }
+            }
+        }
     }
 }
 
 void cmdList(Database &db) {
     for (int i = 0; i < db.size; ++i) {
-        cout << db.entries[i] -> key << ": ";
+        std::cout << db.entries[i] -> key << ": ";
         switch (db.entries[i] -> type) {
         case INT:
-            cout << *(static_cast<int*>(db.entries[i] -> value));
+            std::cout << *(static_cast<int*>(db.entries[i] -> value));
             break;
         case DOUBLE:
-            cout << *(static_cast<double*>(db.entries[i] -> value));
+            std::cout << *(static_cast<double*>(db.entries[i] -> value));
             break;
         case STRING:
-            cout << "\"" << *(static_cast<string*>(db.entries[i] -> value)) << "\"";
+            std::cout << "\"" << *(static_cast<string*>(db.entries[i] -> value)) << "\"";
             break;
         case ARRAY:
-            Array pa = *(static_cast<Array*>(db.entries[i] -> value));
-            printArray(pa);
+            Array arr = *(static_cast<Array*>(db.entries[i] -> value));
+            printArray(arr);
         }
-        cout << endl;
+        std::cout << endl;
     }
 }
 
 void cmdAdd(Database &db) {
-    cout << "key: ";
+    std::cout << "key: ";
     cin >> key;
     int keyInDb = keyCheck(db, key);
     if (keyInDb) remove(db, key);
 
-    cout << "type (int, double, string, array): ";
+    std::cout << "type (int, double, string, array): ";
     cin >> inputType;
 
-    cout << "value: ";
+    std::cout << "value: ";
     if (inputType == "int") {
         type=INT;
         cin >> intValue;
@@ -109,20 +120,20 @@ void cmdAdd(Database &db) {
         string arrayTypeStr;
         int arraySize;
 
-        cout << "type (int, double, string, array): ";
+        std::cout << "type (int, double, string, array): ";
         cin >> arrayTypeStr;
         array.type = stringToType(arrayTypeStr);
 
 
 
         if (arrayTypeStr == "int") {
-            cout << "size: ";
+            std::cout << "size: ";
             cin >> arraySize;
             array.size = arraySize;
 
             int* intArray = new int[arraySize];
             for (int i = 0; i < arraySize; ++i) {
-                cout << "item[" << i << "]: ";
+                std::cout << "item[" << i << "]: ";
                 cin >> intArray[i];
             }
             array.items = intArray;
@@ -130,13 +141,13 @@ void cmdAdd(Database &db) {
             add(db, create(type, key, new Array(array)));
         }
         else if (arrayTypeStr == "double") {
-            cout << "size: ";
+            std::cout << "size: ";
             cin >> arraySize;
             array.size = arraySize;
                         
             double* doubleArray = new double[arraySize];
             for (int i = 0; i < arraySize; ++i) {
-                cout << "item[" << i << "]: ";
+                std::cout << "item[" << i << "]: ";
                 cin >> doubleArray[i];
             }
             array.items = doubleArray;
@@ -144,13 +155,13 @@ void cmdAdd(Database &db) {
             add(db, create(type, key, new Array(array)));
         } 
         else if (arrayTypeStr == "string") {
-            cout << "size: ";
+            std::cout << "size: ";
             cin >> arraySize;
             array.size = arraySize;
                         
             string* stringArray = new string[arraySize];
             for (int i = 0; i < arraySize; ++i) {
-                cout << "item[" << i << "]: ";
+                std::cout << "item[" << i << "]: ";
                 getline(cin >> ws, stringArray[i]);
             }
             array.items = stringArray;
@@ -162,7 +173,7 @@ void cmdAdd(Database &db) {
             int nestedArrayTotalSize, nestedArraySize;
             string nestedArrayType;
 
-            cout << "size: ";
+            std::cout << "size: ";
             cin >> nestedArrayTotalSize;
 
             Array **arrayList = new Array*[nestedArrayTotalSize];
@@ -170,18 +181,18 @@ void cmdAdd(Database &db) {
             for (int i = 0; i < nestedArrayTotalSize; ++i) {
                 Array* nestedArray = new Array;
 
-                cout << "item[" << i << "]: type (int, double, string, array): ";
+                std::cout << "item[" << i << "]: type (int, double, string, array): ";
                 cin >> nestedArrayType;
                 nestedArray->type = stringToType(nestedArrayType);
 
-                cout << "size: ";
+                std::cout << "size: ";
                 cin >> nestedArraySize;
                 nestedArray->size = nestedArraySize;
 
                 if (nestedArrayType == "int") {
                     int* nestedInt = new int[nestedArraySize];
                     for (int j = 0; j < nestedArraySize; ++j) {
-                        cout << "item[" << j << "]: ";
+                        std::cout << "item[" << j << "]: ";
                         cin >> nestedInt[i];
                     }
                     nestedArray->items = nestedInt;
@@ -190,7 +201,7 @@ void cmdAdd(Database &db) {
                 else if(nestedArrayType == "double") {
                     double* nestedDouble = new double[nestedArraySize];
                     for (int j = 0; j < nestedArraySize; ++j) {
-                        cout << "item[" << j << "]: ";
+                        std::cout << "item[" << j << "]: ";
                         cin >> nestedDouble[i];
                     }
                     nestedArray->items = nestedDouble;
@@ -199,46 +210,50 @@ void cmdAdd(Database &db) {
                 else if(nestedArrayType == "string") {
                     string* nestedString = new string[nestedArraySize];
                     for (int j = 0; j < nestedArraySize; ++j) {
-                        cout << "item[" << j << "]: ";
+                        std::cout << "item[" << j << "]: ";
                         getline(cin >> ws, nestedString[i]);
                     }
                     nestedArray->items = nestedString;
                     arrayList[i] = nestedArray;
                 }
+                // std::cout << arrayList[i]->items;
+                // int *a = static_cast<int*>(arrayList[i]->items);
+                // std::cout << "hihi " << a[0] << " " << a[1] << " " << a[2] << endl;
             }
-            add(db, create(type, key, arrayList));
+            void **voidArray = reinterpret_cast<void**>(arrayList);
+            add(db, create(ARRAY, key, voidArray));
         }
     }
 }
 
 void cmdGet(Database &db) {
-    cout << "key: ";
+    std::cout << "key: ";
     cin >> key;
 
     Entry *getEntry = get(db, key);
     if (getEntry != nullptr) {
         switch (getEntry -> type) {
             case INT:
-                cout << getEntry -> key << ": " << *(static_cast<int*>(getEntry->value));
+                std::cout << getEntry -> key << ": " << *(static_cast<int*>(getEntry->value));
                 break;
             case DOUBLE:
-                cout << getEntry -> key << ": " << *(static_cast<double*>(getEntry->value));
+                std::cout << getEntry -> key << ": " << *(static_cast<double*>(getEntry->value));
                 break;
             case STRING:
-                cout << getEntry -> key << ": \"" << *(static_cast<string*>(getEntry->value)) << "\"";
+                std::cout << getEntry -> key << ": \"" << *(static_cast<string*>(getEntry->value)) << "\"";
                 break;
             case ARRAY:
-                cout << getEntry -> key << ": ";
+                std::cout << getEntry -> key << ": ";
                 Array pa = *(static_cast<Array*>(getEntry -> value));
                 printArray(pa);
                 break;
         }
     }
-    cout << endl;
+    std::cout << endl;
 }
 
 void cmdDel(Database &db) {
-    cout << "key: ";
+    std::cout << "key: ";
     cin >> key;
 
     remove(db, key);
@@ -251,7 +266,7 @@ int main() {
 
     while(1) {
         
-        cout << "command (list, add, get, del, exit): ";
+        std::cout << "command (list, add, get, del, exit): ";
         cin >> cmd;
 
         if (cmd == "list") {
@@ -265,13 +280,13 @@ int main() {
         } else if (cmd == "exit") {
             break;
         } else {
-            cout << "[ERROR] undefined command" << endl;
+            std::cout << "[ERROR] undefined command" << endl;
             break;
         }
-        cout << endl;
+        std::cout << endl;
     }
 
     destroy(db);
-    cout << "[END] destroy (db)" << endl;
+    std::cout << "[END] destroy (db)" << endl;
     return 0;
 }
