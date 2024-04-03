@@ -54,17 +54,7 @@ void printArray(Array &arr) {
         }
     } else {
         // arr.type == ARRAY
-        Array** arrayList = static_cast<Array**>(arr.items);
         
-        for (int i = 0; i < arr.size; ++i) {
-            Array *arrayItems = arrayList[i]; 
-            for (int j = 0; j < arrayItems->size; ++j) {
-                if (arrayItems->type == INT) {
-                    int *intArrayItems = static_cast<int*>(arrayItems->items); 
-                    std::cout << intArrayItems[j] << ", ";
-                }
-            }
-        }
     }
 }
 
@@ -83,7 +73,23 @@ void cmdList(Database &db) {
             break;
         case ARRAY:
             Array arr = *(static_cast<Array*>(db.entries[i] -> value));
-            printArray(arr);
+            // Array *arr = *static_cast<Array**>(db.entries[i]->value);
+            // cout << "---" << arr.type << "---" << endl;
+            if (arr.type == ARRAY) {
+                cout << "I 'm in \n";
+                Array **arrayList = static_cast<Array**>(arr.items);
+                for (int i = 0; i < arr.size; ++i) {
+                    Array *arrayItems = arrayList[i];
+                    for (int j = 0; j < arrayItems->size; ++j) {
+                        if (arrayItems->type == INT) {
+                            int *intArrayItems = static_cast<int*>(arrayItems->items);
+                            std::cout << intArrayItems[j] << ", ";
+                        }
+                    }
+                }
+            }
+            else printArray(arr);
+            
         }
         std::cout << endl;
     }
@@ -123,8 +129,6 @@ void cmdAdd(Database &db) {
         std::cout << "type (int, double, string, array): ";
         cin >> arrayTypeStr;
         array.type = stringToType(arrayTypeStr);
-
-
 
         if (arrayTypeStr == "int") {
             std::cout << "size: ";
@@ -177,7 +181,6 @@ void cmdAdd(Database &db) {
             cin >> nestedArrayTotalSize;
 
             Array **arrayList = new Array*[nestedArrayTotalSize];
-
             for (int i = 0; i < nestedArrayTotalSize; ++i) {
                 Array* nestedArray = new Array;
 
@@ -193,16 +196,18 @@ void cmdAdd(Database &db) {
                     int* nestedInt = new int[nestedArraySize];
                     for (int j = 0; j < nestedArraySize; ++j) {
                         std::cout << "item[" << j << "]: ";
-                        cin >> nestedInt[i];
+                        cin >> nestedInt[j];
                     }
                     nestedArray->items = nestedInt;
+                    // int *a = static_cast<int*>(nestedArray->items);
+                    // cout << "a === " << a[0] << ", " << a[1] << ", " << a[2];
                     arrayList[i] = nestedArray;
                 } 
                 else if(nestedArrayType == "double") {
                     double* nestedDouble = new double[nestedArraySize];
                     for (int j = 0; j < nestedArraySize; ++j) {
                         std::cout << "item[" << j << "]: ";
-                        cin >> nestedDouble[i];
+                        cin >> nestedDouble[j];
                     }
                     nestedArray->items = nestedDouble;
                     arrayList[i] = nestedArray;
@@ -211,7 +216,7 @@ void cmdAdd(Database &db) {
                     string* nestedString = new string[nestedArraySize];
                     for (int j = 0; j < nestedArraySize; ++j) {
                         std::cout << "item[" << j << "]: ";
-                        getline(cin >> ws, nestedString[i]);
+                        getline(cin >> ws, nestedString[j]);
                     }
                     nestedArray->items = nestedString;
                     arrayList[i] = nestedArray;
@@ -220,8 +225,10 @@ void cmdAdd(Database &db) {
                 // int *a = static_cast<int*>(arrayList[i]->items);
                 // std::cout << "hihi " << a[0] << " " << a[1] << " " << a[2] << endl;
             }
-            void **voidArray = reinterpret_cast<void**>(arrayList);
-            add(db, create(ARRAY, key, voidArray));
+            // void **voidArray = reinterpret_cast<void**>(arrayList);
+            add(db, create(ARRAY, key, arrayList)); 
+            int *a = static_cast<int*>(arrayList[0]->items);
+            std::cout << "hihi " << a[0] << " " << a[1] << " " << a[2] << endl;
         }
     }
 }

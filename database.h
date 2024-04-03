@@ -44,5 +44,5 @@ void remove(Database &database, std::string &key);
 void destroy(Database &database);
 
 int keyCheck(Database &database, string &key);
-
+// Entry *create(Type type, std::string key, Array **value);
 #endif

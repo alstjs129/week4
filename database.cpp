@@ -11,7 +11,13 @@ Entry *create(Type type, std::string key, void *value) {
 
     return newEntry;
 }
-
+// Entry *create(Type type, std::string key, Array **value) {
+//     Entry *newEntry = new Entry;
+//     newEntry->type = type;
+//     newEntry->key = key;
+//     newEntry->value = static_cast<void*>(value);
+//     return newEntry;
+// }
 void init(Database &database) {
     database.entries = nullptr;
     database.size = 0;
