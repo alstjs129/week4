@@ -75,20 +75,21 @@ void cmdList(Database &db) {
             Array arr = *(static_cast<Array*>(db.entries[i] -> value));
             // Array *arr = *static_cast<Array**>(db.entries[i]->value);
             // cout << "---" << arr.type << "---" << endl;
-            if (arr.type == ARRAY) {
-                cout << "I 'm in \n";
-                Array **arrayList = static_cast<Array**>(arr.items);
-                for (int i = 0; i < arr.size; ++i) {
-                    Array *arrayItems = arrayList[i];
-                    for (int j = 0; j < arrayItems->size; ++j) {
-                        if (arrayItems->type == INT) {
-                            int *intArrayItems = static_cast<int*>(arrayItems->items);
-                            std::cout << intArrayItems[j] << ", ";
-                        }
-                    }
-                }
-            }
-            else printArray(arr);
+            // if (arr.type == ARRAY) {
+                // cout << "I 'm in \n";
+                // Array **arrayList = static_cast<Array**>(arr.items);
+                // for (int i = 0; i < arr.size; ++i) {
+                //     Array *arrayItems = arrayList[i];
+                //     for (int j = 0; j < arrayItems->size; ++j) {
+                //         if (arrayItems->type == INT) {
+                //             int *intArrayItems = static_cast<int*>(arrayItems->items);
+                //             std::cout << intArrayItems[j] << ", ";
+                //         }
+                //     }
+                // }
+            // }
+            // else printArray(arr);
+            printArray(arr);
             
         }
         std::cout << endl;
